@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 const HERO_IMAGE =
-  "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/352e2e3b-2b28-4102-9f25-cd9ecd2d5713.jpg";
+  "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/07d5c5b8-45b1-442a-9bdb-c43753de11d9.jpg";
 
 const steps = [
   {
