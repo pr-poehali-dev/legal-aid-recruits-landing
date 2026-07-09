@@ -85,7 +85,7 @@ const NavBar = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[hsl(40,30%,96%)]/95 backdrop-blur-md border-b-2 border-ink" : "bg-transparent"}`}>
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" className="font-display text-lg font-bold text-foreground bg-lime px-3 py-1.5 border-2 border-ink shadow-brutal-sm -rotate-2">
-          ЮрПризыв
+          Призывник 59
         </a>
         <div className="hidden md:flex items-center gap-6">
           {links.map((l) => (
@@ -163,7 +163,7 @@ const Hero = () => {
 
           <div className={`flex gap-6 mt-12 transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             style={{ transitionDelay: "400ms" }}>
-            {[{ val: "98%", label: "успешных дел", bg: "bg-lime" }, { val: "1500+", label: "клиентов", bg: "bg-pink-brand" }, { val: "5 лет", label: "практики", bg: "bg-orange-brand" }].map((s) => (
+            {[{ val: "98%", label: "успешных дел", bg: "bg-lime" }, { val: "1500+", label: "клиентов", bg: "bg-pink-brand" }, { val: "10+ лет", label: "практики", bg: "bg-orange-brand" }].map((s) => (
               <div key={s.val} className={`${s.bg} border-2 border-ink px-4 py-3`}>
                 <div className="font-display text-xl font-bold text-foreground">{s.val}</div>
                 <div className="font-golos text-xs text-foreground/70 mt-0.5 font-semibold">{s.label}</div>
@@ -334,10 +334,10 @@ const Contact = () => {
             </p>
             <div className="flex flex-col gap-4">
               {[
-                { icon: "Phone", text: "+7 (999) 000-00-00", bg: "bg-violet", tc: "text-white" },
-                { icon: "Mail", text: "info@yourlaw.ru", bg: "bg-lime", tc: "text-foreground" },
-                { icon: "MapPin", text: "Москва, ул. Примерная, д. 1", bg: "bg-pink-brand", tc: "text-white" },
-                { icon: "Clock", text: "Пн–Пт: 9:00–19:00, Сб: 10:00–16:00", bg: "bg-orange-brand", tc: "text-white" },
+                { icon: "Phone", text: "+7 (342) 234-19-18", bg: "bg-violet", tc: "text-white" },
+                { icon: "Mail", text: "help_me@prizivnik59.ru", bg: "bg-lime", tc: "text-foreground" },
+                { icon: "MapPin", text: "г. Пермь, ул. Екатерининская 109А, офис 305 (вход с ул. Попова)", bg: "bg-pink-brand", tc: "text-white" },
+                { icon: "Clock", text: "Пн–Пт: 10:00–19:00, Сб: 10:00–16:00 (строго по записи)", bg: "bg-orange-brand", tc: "text-white" },
               ].map((c, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <div className={`w-10 h-10 ${c.bg} border-2 border-ink flex items-center justify-center flex-shrink-0`}>
@@ -403,13 +403,13 @@ const Footer = () => (
   <footer className="bg-white border-t-2 border-ink py-10">
     <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
       <div>
-        <span className="font-display text-base font-bold text-foreground bg-lime border-2 border-ink px-3 py-1 inline-block -rotate-1">ЮрПризыв</span>
+        <span className="font-display text-base font-bold text-foreground bg-lime border-2 border-ink px-3 py-1 inline-block -rotate-1">Призывник 59</span>
         <p className="font-golos text-xs text-foreground/50 mt-2 font-medium">Юридическое сопровождение призывников</p>
       </div>
       <p className="font-golos text-xs text-foreground/45 text-center font-medium">
         Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
       </p>
-      <p className="font-golos text-xs text-foreground/45 font-medium">© 2024 ЮрПризыв</p>
+      <p className="font-golos text-xs text-foreground/45 font-medium">© 2024 Призывник 59</p>
     </div>
   </footer>
 );
