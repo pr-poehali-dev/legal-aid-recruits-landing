@@ -4,38 +4,41 @@
 
 @layer base {
   :root {
-    --background: 215 40% 97%;
-    --foreground: 220 30% 12%;
+    --background: 40 30% 96%;
+    --foreground: 240 15% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 30% 12%;
+    --card-foreground: 240 15% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 12%;
+    --popover-foreground: 240 15% 10%;
 
-    --primary: 212 95% 48%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 30% 93%;
-    --secondary-foreground: 220 30% 12%;
+    --secondary: 40 20% 91%;
+    --secondary-foreground: 240 15% 10%;
 
-    --muted: 215 25% 93%;
-    --muted-foreground: 220 15% 48%;
+    --muted: 40 15% 91%;
+    --muted-foreground: 240 8% 42%;
 
-    --accent: 168 72% 42%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 82 85% 55%;
+    --accent-foreground: 240 15% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 212 95% 48%;
+    --border: 240 15% 10%;
+    --input: 240 10% 85%;
+    --ring: 262 83% 58%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
-    --blue: 212 95% 48%;
-    --teal: 168 72% 42%;
+    --violet: 262 83% 58%;
+    --lime: 82 85% 55%;
+    --pink: 330 85% 60%;
+    --orange: 24 95% 58%;
+    --ink: 240 15% 10%;
   }
 }
 
@@ -57,33 +60,65 @@
   h2,
   h3,
   h4 {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Unbounded", sans-serif;
   }
 }
 
 @layer utilities {
-  .font-montserrat {
-    font-family: "Montserrat", sans-serif;
+  .font-display {
+    font-family: "Unbounded", sans-serif;
   }
 
   .font-golos {
     font-family: "Golos Text", sans-serif;
   }
 
-  .text-blue {
-    color: hsl(var(--blue));
+  .text-violet {
+    color: hsl(var(--violet));
   }
 
-  .bg-blue-brand {
-    background-color: hsl(var(--blue));
+  .bg-violet {
+    background-color: hsl(var(--violet));
   }
 
-  .text-teal {
-    color: hsl(var(--teal));
+  .text-lime {
+    color: hsl(var(--lime));
   }
 
-  .bg-teal-brand {
-    background-color: hsl(var(--teal));
+  .bg-lime {
+    background-color: hsl(var(--lime));
+  }
+
+  .text-pink-brand {
+    color: hsl(var(--pink));
+  }
+
+  .bg-pink-brand {
+    background-color: hsl(var(--pink));
+  }
+
+  .text-orange-brand {
+    color: hsl(var(--orange));
+  }
+
+  .bg-orange-brand {
+    background-color: hsl(var(--orange));
+  }
+
+  .border-ink {
+    border-color: hsl(var(--ink));
+  }
+
+  .shadow-brutal {
+    box-shadow: 5px 5px 0 0 hsl(var(--ink));
+  }
+
+  .shadow-brutal-sm {
+    box-shadow: 3px 3px 0 0 hsl(var(--ink));
+  }
+
+  .shadow-brutal-violet {
+    box-shadow: 6px 6px 0 0 hsl(var(--violet));
   }
 
   @keyframes fadeUp {
@@ -104,5 +139,19 @@
     to {
       opacity: 1;
     }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-2deg);
+    }
+    50% {
+      transform: rotate(2deg);
+    }
+  }
+
+  .animate-wiggle {
+    animation: wiggle 3s ease-in-out infinite;
   }
 }
