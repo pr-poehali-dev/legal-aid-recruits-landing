@@ -409,7 +409,9 @@ const Footer = () => (
       <p className="font-golos text-xs text-foreground/45 text-center font-medium">
         Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
       </p>
-      <p className="font-golos text-xs text-foreground/45 font-medium">© 2024 Призывник 59</p>
+      <p className="font-golos text-xs text-foreground/45 font-medium">
+        © 2014–{new Date().getFullYear()} Призывник 59. Все права защищены. ИП Хабибрахманов А.Ф. ОГРНИП: 323595800035942
+      </p>
     </div>
   </footer>
 );
