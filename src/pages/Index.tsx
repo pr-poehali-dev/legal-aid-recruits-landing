@@ -93,6 +93,10 @@ const NavBar = () => {
               {l.label}
             </a>
           ))}
+          <a href="tel:+73422341918" className="font-golos text-sm font-bold text-foreground hover:text-violet transition-colors flex items-center gap-1.5">
+            <Icon name="Phone" size={16} />
+            +7 (342) 234-19-18
+          </a>
           <div className="flex items-center gap-2">
             <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink font-display text-xs font-bold text-foreground shadow-brutal-sm hover:bg-lime hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
               VK
@@ -116,6 +120,10 @@ const NavBar = () => {
               {l.label}
             </a>
           ))}
+          <a href="tel:+73422341918" className="font-golos text-sm font-bold text-foreground flex items-center gap-1.5">
+            <Icon name="Phone" size={16} />
+            +7 (342) 234-19-18
+          </a>
           <a href="#contact" onClick={() => setMenuOpen(false)} className="font-golos text-sm font-bold bg-violet text-white px-5 py-3 border-2 border-ink text-center shadow-brutal-sm">
             Бесплатная консультация
           </a>
@@ -417,25 +425,33 @@ const Contact = () => {
 
 const Footer = () => (
   <footer className="bg-white border-t-2 border-ink py-10">
-    <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <span className="font-display text-base font-bold text-foreground bg-lime border-2 border-ink px-3 py-1 inline-block -rotate-1">Призывник 59</span>
-        <p className="font-golos text-xs text-foreground/50 mt-2 font-medium">Юридическое сопровождение призывников</p>
-        <div className="flex items-center gap-2 mt-3">
-          <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink font-display text-[10px] font-bold text-foreground hover:bg-lime transition-colors">
-            VK
-          </a>
-          <a href="https://t.me/+SUjTZ3GcUyAwNDAy" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink hover:bg-lime transition-colors">
-            <Icon name="Send" size={14} className="text-foreground" />
-          </a>
+    <div className="max-w-6xl mx-auto px-6 flex flex-col gap-6">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+          <span className="font-display text-base font-bold text-foreground bg-lime border-2 border-ink px-3 py-1 inline-block -rotate-1">Призывник 59</span>
+          <p className="font-golos text-xs text-foreground/50 mt-2 font-medium">Юридическое сопровождение призывников</p>
+          <div className="flex items-center gap-2 mt-3">
+            <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink font-display text-[10px] font-bold text-foreground hover:bg-lime transition-colors">
+              VK
+            </a>
+            <a href="https://t.me/+SUjTZ3GcUyAwNDAy" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink hover:bg-lime transition-colors">
+              <Icon name="Send" size={14} className="text-foreground" />
+            </a>
+          </div>
         </div>
+        <img src="https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/bucket/8d14a79e-8a80-4e5d-80a9-97b8e95d01f1.jpg" alt="Военком-Гарант" className="w-16 h-auto" />
+        <p className="font-golos text-xs text-foreground/45 text-center font-medium">
+          Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
+        </p>
       </div>
-      <p className="font-golos text-xs text-foreground/45 text-center font-medium">
-        Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
-      </p>
-      <p className="font-golos text-xs text-foreground/45 font-medium">
-        © 2014–{new Date().getFullYear()} Призывник 59. Все права защищены. ИП Хабибрахманов А.Ф. ОГРНИП: 323595800035942
-      </p>
+      <div className="border-t border-ink/10 pt-4 flex flex-col md:flex-row items-center justify-between gap-2">
+        <p className="font-golos text-xs text-foreground/45 font-medium">
+          © 2014–{new Date().getFullYear()} Призывник 59. Все права защищены. ИП Хабибрахманов А.Ф. ОГРНИП: 323595800035942
+        </p>
+        <p className="font-golos text-xs text-foreground/45 font-medium">
+          Сайт является собственностью компании «Военком-Гарант»
+        </p>
+      </div>
     </div>
   </footer>
 );
