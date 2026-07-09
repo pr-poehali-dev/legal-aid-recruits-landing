@@ -93,6 +93,14 @@ const NavBar = () => {
               {l.label}
             </a>
           ))}
+          <div className="flex items-center gap-2">
+            <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink font-display text-xs font-bold text-foreground shadow-brutal-sm hover:bg-lime hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+              VK
+            </a>
+            <a href="https://t.me/+SUjTZ3GcUyAwNDAy" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink shadow-brutal-sm hover:bg-lime hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+              <Icon name="Send" size={16} className="text-foreground" />
+            </a>
+          </div>
           <a href="#contact" className="font-golos text-sm font-bold bg-violet text-white px-5 py-2.5 border-2 border-ink shadow-brutal-sm hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all">
             Консультация
           </a>
@@ -111,6 +119,14 @@ const NavBar = () => {
           <a href="#contact" onClick={() => setMenuOpen(false)} className="font-golos text-sm font-bold bg-violet text-white px-5 py-3 border-2 border-ink text-center shadow-brutal-sm">
             Бесплатная консультация
           </a>
+          <div className="flex items-center gap-2">
+            <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink font-display text-xs font-bold text-foreground shadow-brutal-sm">
+              VK
+            </a>
+            <a href="https://t.me/+SUjTZ3GcUyAwNDAy" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink shadow-brutal-sm">
+              <Icon name="Send" size={16} className="text-foreground" />
+            </a>
+          </div>
         </div>
       )}
     </nav>
@@ -405,6 +421,14 @@ const Footer = () => (
       <div>
         <span className="font-display text-base font-bold text-foreground bg-lime border-2 border-ink px-3 py-1 inline-block -rotate-1">Призывник 59</span>
         <p className="font-golos text-xs text-foreground/50 mt-2 font-medium">Юридическое сопровождение призывников</p>
+        <div className="flex items-center gap-2 mt-3">
+          <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink font-display text-[10px] font-bold text-foreground hover:bg-lime transition-colors">
+            VK
+          </a>
+          <a href="https://t.me/+SUjTZ3GcUyAwNDAy" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-8 h-8 flex items-center justify-center bg-[hsl(40,30%,96%)] border-2 border-ink hover:bg-lime transition-colors">
+            <Icon name="Send" size={14} className="text-foreground" />
+          </a>
+        </div>
       </div>
       <p className="font-golos text-xs text-foreground/45 text-center font-medium">
         Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
