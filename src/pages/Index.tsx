@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const HERO_IMAGE =
   "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/07d5c5b8-45b1-442a-9bdb-c43753de11d9.jpg";
@@ -340,6 +342,7 @@ const Steps = () => {
 const Contact = () => {
   const { ref, inView } = useInView();
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
+  const [consent, setConsent] = useState(false);
   return (
     <section id="contact" className="py-24 bg-[hsl(40,30%,96%)]">
       <div ref={ref} className="max-w-6xl mx-auto px-6">
@@ -408,12 +411,26 @@ const Contact = () => {
                     className="w-full bg-[hsl(40,30%,96%)] border-2 border-ink px-4 py-3 font-golos text-sm text-foreground placeholder:text-foreground/35 focus:outline-none focus:bg-white transition-all resize-none font-medium"
                   />
                 </div>
-                <button className="font-golos font-bold bg-violet text-white px-6 py-4 border-2 border-ink text-base shadow-brutal hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all w-full mt-1">
+                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                  <Checkbox
+                    checked={consent}
+                    onCheckedChange={(v) => setConsent(v === true)}
+                    className="mt-0.5 border-ink data-[state=checked]:bg-violet data-[state=checked]:border-ink"
+                  />
+                  <span className="font-golos text-xs text-foreground/60 font-medium leading-snug">
+                    Я согласен на{" "}
+                    <Link to="/privacy-policy" target="_blank" className="text-violet underline hover:no-underline">
+                      обработку персональных данных
+                    </Link>{" "}
+                    в соответствии с 152-ФЗ
+                  </span>
+                </label>
+                <button
+                  disabled={!consent}
+                  className="font-golos font-bold bg-violet text-white px-6 py-4 border-2 border-ink text-base shadow-brutal hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all w-full mt-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-brutal disabled:hover:translate-x-0 disabled:hover:translate-y-0"
+                >
                   Отправить заявку →
                 </button>
-                <p className="font-golos text-xs text-foreground/45 text-center font-medium">
-                  Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
-                </p>
               </div>
             </div>
           </div>
@@ -448,6 +465,9 @@ const Footer = () => (
         <p className="font-golos text-xs text-foreground/45 font-medium">
           © 2014–{new Date().getFullYear()} Призывник 59. Все права защищены. ИП Хабибрахманов А.Ф. ОГРНИП: 323595800035942
         </p>
+        <Link to="/privacy-policy" className="font-golos text-xs text-foreground/45 font-medium underline hover:text-violet transition-colors">
+          Политика обработки персональных данных
+        </Link>
         <p className="font-golos text-xs text-foreground/45 font-medium">
           Сайт является собственностью компании «Военком-Гарант»
         </p>
