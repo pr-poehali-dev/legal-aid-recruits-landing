@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Get articles list",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"articles": [], "total": 0},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get non-existent article by slug",
+      "method": "GET",
+      "path": "/?slug=not-exists-xyz",
+      "expectedStatus": 404
+    }
+  ]
+}

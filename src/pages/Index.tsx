@@ -120,6 +120,9 @@ const NavBar = () => {
               {l.label}
             </a>
           ))}
+          <Link to="/blog" className="font-golos text-sm font-semibold text-foreground/75 hover:text-violet transition-colors">
+            Статьи
+          </Link>
           <a href="tel:+73422341918" className="font-golos text-sm font-bold text-foreground hover:text-violet transition-colors flex items-center gap-1.5">
             <Icon name="Phone" size={16} />
             +7 (342) 234-19-18
@@ -147,6 +150,9 @@ const NavBar = () => {
               {l.label}
             </a>
           ))}
+          <Link to="/blog" onClick={() => setMenuOpen(false)} className="font-golos text-sm font-semibold text-foreground/80">
+            Статьи
+          </Link>
           <a href="tel:+73422341918" className="font-golos text-sm font-bold text-foreground flex items-center gap-1.5">
             <Icon name="Phone" size={16} />
             +7 (342) 234-19-18
