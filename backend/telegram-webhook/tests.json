@@ -7,11 +7,11 @@
       "expectedStatus": 200
     },
     {
-      "name": "Empty body returns ok skipped",
+      "name": "Request without secret token is forbidden",
       "method": "POST",
       "path": "/",
       "body": {},
-      "expectedStatus": 200
+      "expectedStatus": 403
     }
   ]
 }

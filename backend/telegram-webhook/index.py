@@ -42,6 +42,22 @@ def handler(event: dict, context) -> dict:
 
     headers = {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
 
+    params = event.get('queryStringParameters') or {}
+    if method == 'GET' and params.get('setup') == '1':
+        bot_token = os.environ['TELEGRAM_BOT_TOKEN']
+        webhook_secret = os.environ.get('TELEGRAM_WEBHOOK_SECRET', '')
+        self_url = params.get('url', '')
+        resp = requests.post(
+            f'https://api.telegram.org/bot{bot_token}/setWebhook',
+            json={
+                'url': self_url,
+                'secret_token': webhook_secret,
+                'allowed_updates': ['message', 'channel_post'],
+            },
+            timeout=15,
+        )
+        return {'statusCode': 200, 'headers': headers, 'body': json.dumps(resp.json())}
+
     if method != 'POST':
         return {'statusCode': 405, 'headers': headers, 'body': json.dumps({'error': 'Method not allowed'})}
 
