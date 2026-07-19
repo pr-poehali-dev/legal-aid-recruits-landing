@@ -1,12 +1,35 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import Icon from "@/components/ui/icon";
 import { Checkbox } from "@/components/ui/checkbox";
 import CookieBanner from "@/components/CookieBanner";
 import { useSeo } from "@/hooks/use-seo";
+import funcUrls from "../../backend/func2url.json";
 
 const HERO_IMAGE =
   "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/07d5c5b8-45b1-442a-9bdb-c43753de11d9.jpg";
+
+function formatPhone(value: string) {
+  let digits = value.replace(/\D/g, "");
+  if (digits.startsWith("8")) digits = "7" + digits.slice(1);
+  if (!digits.startsWith("7")) digits = "7" + digits;
+  digits = digits.slice(0, 11);
+
+  const rest = digits.slice(1);
+  let result = "+7";
+  if (rest.length > 0) result += ` (${rest.slice(0, 3)}`;
+  if (rest.length >= 3) result += `)`;
+  if (rest.length > 3) result += ` ${rest.slice(3, 6)}`;
+  if (rest.length > 6) result += `-${rest.slice(6, 8)}`;
+  if (rest.length > 8) result += `-${rest.slice(8, 10)}`;
+  return result;
+}
+
+function isValidPhone(value: string) {
+  const digits = value.replace(/\D/g, "");
+  return digits.length === 11 && digits.startsWith("7");
+}
 
 const steps = [
   {
@@ -345,6 +368,49 @@ const Contact = () => {
   const { ref, inView } = useInView();
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [consent, setConsent] = useState(false);
+  const [phoneTouched, setPhoneTouched] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const phoneError = phoneTouched && form.phone && !isValidPhone(form.phone);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, phone: formatPhone(e.target.value) });
+  };
+
+  const handleSubmit = async () => {
+    if (!form.name.trim() || form.name.trim().length < 2) {
+      toast.error("Укажите ваше имя");
+      return;
+    }
+    if (!isValidPhone(form.phone)) {
+      setPhoneTouched(true);
+      toast.error("Укажите корректный номер телефона");
+      return;
+    }
+    if (!consent) {
+      toast.error("Подтвердите согласие на обработку персональных данных");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(funcUrls["send-application"], {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Заявка отправлена! Мы свяжемся с вами в ближайшее время.");
+      setForm({ name: "", phone: "", message: "" });
+      setConsent(false);
+      setPhoneTouched(false);
+    } catch {
+      toast.error("Не удалось отправить заявку. Попробуйте позвонить нам.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 bg-[hsl(40,30%,96%)]">
       <div ref={ref} className="max-w-6xl mx-auto px-6">
@@ -398,10 +464,15 @@ const Contact = () => {
                   <input
                     type="tel"
                     value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    onChange={handlePhoneChange}
+                    onFocus={() => !form.phone && setForm({ ...form, phone: "+7" })}
+                    onBlur={() => setPhoneTouched(true)}
                     placeholder="+7 (999) 000-00-00"
-                    className="w-full bg-[hsl(40,30%,96%)] border-2 border-ink px-4 py-3 font-golos text-sm text-foreground placeholder:text-foreground/35 focus:outline-none focus:bg-white transition-all font-medium"
+                    className={`w-full bg-[hsl(40,30%,96%)] border-2 px-4 py-3 font-golos text-sm text-foreground placeholder:text-foreground/35 focus:outline-none focus:bg-white transition-all font-medium ${phoneError ? "border-red-500" : "border-ink"}`}
                   />
+                  {phoneError && (
+                    <span className="font-golos text-xs text-red-500 font-semibold mt-1 block">Введите номер полностью, например +7 (999) 000-00-00</span>
+                  )}
                 </div>
                 <div>
                   <label className="font-golos text-xs text-foreground/60 font-bold uppercase tracking-wider mb-1.5 block">Вопрос</label>
@@ -428,10 +499,11 @@ const Contact = () => {
                   </span>
                 </label>
                 <button
-                  disabled={!consent}
+                  disabled={!consent || submitting}
+                  onClick={handleSubmit}
                   className="font-golos font-bold bg-violet text-white px-6 py-4 border-2 border-ink text-base shadow-brutal hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all w-full mt-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-brutal disabled:hover:translate-x-0 disabled:hover:translate-y-0"
                 >
-                  Отправить заявку →
+                  {submitting ? "Отправка..." : "Отправить заявку →"}
                 </button>
               </div>
             </div>

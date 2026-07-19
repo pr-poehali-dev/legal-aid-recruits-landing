@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Invalid phone returns 400",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "Иван Иванов", "phone": "123", "message": "Тест"},
+      "expectedStatus": 400
+    },
+    {
+      "name": "Missing name returns 400",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "", "phone": "+7 (999) 000-00-00", "message": "Тест"},
+      "expectedStatus": 400
+    }
+  ]
+}
