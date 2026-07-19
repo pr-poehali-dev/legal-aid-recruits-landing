@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Checkbox } from "@/components/ui/checkbox";
+import CookieBanner from "@/components/CookieBanner";
 
 const HERO_IMAGE =
   "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/07d5c5b8-45b1-442a-9bdb-c43753de11d9.jpg";
@@ -485,6 +486,7 @@ const Index = () => (
     <Steps />
     <Contact />
     <Footer />
+    <CookieBanner />
   </div>
 );
 
