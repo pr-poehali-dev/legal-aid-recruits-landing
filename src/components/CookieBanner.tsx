@@ -24,7 +24,7 @@ const CookieBanner = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6">
-      <div className="max-w-3xl mx-auto bg-white border-2 border-ink shadow-brutal p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+      <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm border-2 border-ink shadow-brutal p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
         <div className="w-10 h-10 flex-shrink-0 bg-lime border-2 border-ink flex items-center justify-center">
           <Icon name="Cookie" size={18} className="text-foreground" />
         </div>
