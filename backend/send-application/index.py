@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 
 
 def handler(event: dict, context) -> dict:
-    """Принимает заявку с сайта (имя, телефон, вопрос) и отправляет её на почту получателя через SMTP (Gmail)"""
+    """Принимает заявку с сайта (имя, телефон, вопрос) и отправляет её на почту получателя через SMTP (Timeweb)"""
     method = event.get('httpMethod', 'GET')
 
     if method == 'OPTIONS':
@@ -54,8 +54,7 @@ def handler(event: dict, context) -> dict:
     body_text = f"Новая заявка с сайта Призывник 59\n\nИмя: {name}\nТелефон: {phone}\nВопрос: {message or '—'}"
     msg.attach(MIMEText(body_text, 'plain', 'utf-8'))
 
-    with smtplib.SMTP('smtp.gmail.com', 587) as server:
-        server.starttls()
+    with smtplib.SMTP_SSL('smtp.timeweb.ru', 465) as server:
         server.login(smtp_user, smtp_password)
         server.sendmail(smtp_user, recipient, msg.as_string())
 
