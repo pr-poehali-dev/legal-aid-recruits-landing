@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import { useSeo } from "@/hooks/use-seo";
 
-const PrivacyPolicy = () => (
+const PrivacyPolicy = () => {
+  useSeo({
+    title: "Политика обработки персональных данных | Военком-Гарант",
+    description: "Политика обработки персональных данных ИП Хабибрахманов А.Ф. (Военком-Гарант, Призывник 59) в соответствии с 152-ФЗ.",
+    noindex: true,
+  });
+
+  return (
   <div className="min-h-screen bg-[hsl(40,30%,96%)]">
     <div className="max-w-3xl mx-auto px-6 py-16">
       <Link to="/" className="inline-flex items-center gap-2 font-golos text-sm font-bold text-foreground/70 hover:text-violet transition-colors mb-8">
@@ -162,6 +170,7 @@ const PrivacyPolicy = () => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default PrivacyPolicy;

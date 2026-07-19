@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Checkbox } from "@/components/ui/checkbox";
 import CookieBanner from "@/components/CookieBanner";
+import { useSeo } from "@/hooks/use-seo";
 
 const HERO_IMAGE =
   "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/files/07d5c5b8-45b1-442a-9bdb-c43753de11d9.jpg";
@@ -202,7 +203,7 @@ const Hero = () => {
         <div className={`relative transition-all duration-700 ${loaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"}`}
           style={{ transitionDelay: "300ms" }}>
           <div className="relative border-2 border-ink overflow-hidden shadow-brutal-violet">
-            <img src={HERO_IMAGE} alt="Юриспруденция" className="w-full h-[440px] object-cover" />
+            <img src={HERO_IMAGE} alt="Юридическая помощь призывникам — Военком-Гарант Пермь" loading="eager" className="w-full h-[440px] object-cover" />
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white border-2 border-ink shadow-brutal-sm px-5 py-4 flex items-center gap-3 rotate-[-2deg]">
             <div className="w-10 h-10 bg-lime border-2 border-ink flex items-center justify-center">
@@ -457,7 +458,7 @@ const Footer = () => (
             </a>
           </div>
         </div>
-        <img src="https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/bucket/8d14a79e-8a80-4e5d-80a9-97b8e95d01f1.jpg" alt="Военком-Гарант" className="w-16 h-auto" />
+        <img src="https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/bucket/8d14a79e-8a80-4e5d-80a9-97b8e95d01f1.jpg" alt="Логотип Военком-Гарант, юридическая компания в Перми" loading="lazy" className="w-16 h-auto" />
         <p className="font-golos text-xs text-foreground/45 text-center font-medium">
           Деятельность соответствует ФЗ №53 и ПП №565 · Только законные методы
         </p>
@@ -477,7 +478,13 @@ const Footer = () => (
   </footer>
 );
 
-const Index = () => (
+const Index = () => {
+  useSeo({
+    title: "Военком-Гарант | Призывник 59 — Законное освобождение от службы в Перми",
+    description: "Военком-Гарант (Призывник 59) — юридическое сопровождение призывников в Перми. Законное освобождение от военной службы по состоянию здоровья. Гарантия по договору, 98% успешных дел.",
+  });
+
+  return (
   <div className="bg-[hsl(40,30%,96%)] min-h-screen">
     <NavBar />
     <Hero />
@@ -488,6 +495,7 @@ const Index = () => (
     <Footer />
     <CookieBanner />
   </div>
-);
+  );
+};
 
 export default Index;
