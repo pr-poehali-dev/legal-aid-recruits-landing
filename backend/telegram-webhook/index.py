@@ -1,12 +1,34 @@
 import json
 import os
 import re
+import smtplib
 import uuid
 from datetime import datetime
+from email.mime.text import MIMEText
 
 import boto3
 import psycopg2
 import requests
+
+SITE_URL = 'https://prizivnik59.ru'
+
+
+def notify(subject: str, body: str) -> None:
+    smtp_user = os.environ.get('SMTP_USER')
+    smtp_password = os.environ.get('SMTP_PASSWORD')
+    recipient = os.environ.get('BLOG_ALLOWED_SENDER')
+    if not smtp_user or not smtp_password or not recipient:
+        return
+    try:
+        msg = MIMEText(body, 'plain', 'utf-8')
+        msg['From'] = smtp_user
+        msg['To'] = recipient
+        msg['Subject'] = subject
+        with smtplib.SMTP_SSL('smtp.timeweb.ru', 465) as server:
+            server.login(smtp_user, smtp_password)
+            server.sendmail(smtp_user, recipient, msg.as_string())
+    except Exception:
+        pass
 
 
 def slugify(text: str) -> str:
@@ -144,6 +166,11 @@ def handler(event: dict, context) -> dict:
     article_id = cur.fetchone()[0]
     cur.close()
     conn.close()
+
+    notify(
+        f'Новая статья опубликована — {code}',
+        f'Статья "{title}" (ID {code}) опубликована на сайте через Telegram.\n\n{SITE_URL}/blog/{slug}'
+    )
 
     return {
         'statusCode': 200,

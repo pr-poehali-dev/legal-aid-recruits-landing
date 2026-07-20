@@ -3,13 +3,35 @@ import imaplib
 import json
 import os
 import re
+import smtplib
 import uuid
 from datetime import datetime
 from email.header import decode_header
+from email.mime.text import MIMEText
 from email.utils import parseaddr
 
 import boto3
 import psycopg2
+
+SITE_URL = 'https://prizivnik59.ru'
+
+
+def notify(subject: str, body: str) -> None:
+    smtp_user = os.environ.get('SMTP_USER')
+    smtp_password = os.environ.get('SMTP_PASSWORD')
+    recipient = os.environ.get('BLOG_ALLOWED_SENDER')
+    if not smtp_user or not smtp_password or not recipient:
+        return
+    try:
+        msg = MIMEText(body, 'plain', 'utf-8')
+        msg['From'] = smtp_user
+        msg['To'] = recipient
+        msg['Subject'] = subject
+        with smtplib.SMTP_SSL('smtp.timeweb.ru', 465) as server:
+            server.login(smtp_user, smtp_password)
+            server.sendmail(smtp_user, recipient, msg.as_string())
+    except Exception:
+        pass
 
 
 def slugify(text: str) -> str:
@@ -183,10 +205,16 @@ def handler(event: dict, context) -> dict:
         action, article_code = parse_command(subject)
 
         if action == 'delete':
+            cur.execute(f'SELECT title FROM {table} WHERE article_code = %s', (article_code,))
+            found = cur.fetchone()
             cur.execute(f'DELETE FROM {table} WHERE article_code = %s RETURNING id', (article_code,))
             deleted = cur.fetchone()
             if deleted:
                 processed.append({'action': 'delete', 'article_code': article_code, 'article_id': deleted[0]})
+                notify(
+                    f'Статья удалена — {article_code}',
+                    f'Статья "{found[0] if found else ""}" (ID {article_code}) удалена с сайта.'
+                )
             else:
                 skipped.append({'uid': uid_str, 'reason': 'article not found for delete', 'article_code': article_code})
             imap.uid('store', uid, '+FLAGS', '\\Seen')
@@ -227,6 +255,10 @@ def handler(event: dict, context) -> dict:
                 )
 
             processed.append({'action': 'edit', 'article_code': article_code, 'article_id': existing_id})
+            notify(
+                f'Статья отредактирована — {article_code}',
+                f'Статья "{new_title}" (ID {article_code}) обновлена.\n\n{SITE_URL}/blog/{existing_slug}'
+            )
             imap.uid('store', uid, '+FLAGS', '\\Seen')
             continue
 
@@ -260,6 +292,10 @@ def handler(event: dict, context) -> dict:
         )
         article_id = cur.fetchone()[0]
         processed.append({'action': 'create', 'article_id': article_id, 'slug': slug, 'title': title, 'article_code': code})
+        notify(
+            f'Новая статья опубликована — {code}',
+            f'Статья "{title}" (ID {code}) опубликована на сайте.\n\n{SITE_URL}/blog/{slug}'
+        )
 
         imap.uid('store', uid, '+FLAGS', '\\Seen')
 
