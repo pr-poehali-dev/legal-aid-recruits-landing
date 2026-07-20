@@ -11,12 +11,56 @@ interface ArticleData {
   title: string;
   content: string;
   image_url: string;
+  gallery_images: string[];
   published_at: string;
 }
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
 }
+
+const Gallery = ({ images, title }: { images: string[]; title: string }) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="mt-8">
+      <h2 className="font-display text-lg font-bold text-foreground mb-4">Фотографии</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {images.map((src, i) => (
+          <button
+            key={i}
+            onClick={() => setOpenIndex(i)}
+            className="border-2 border-ink shadow-brutal-sm overflow-hidden aspect-square hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+          >
+            <img src={src} alt={`${title} — фото ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+          </button>
+        ))}
+      </div>
+
+      {openIndex !== null && (
+        <div
+          className="fixed inset-0 z-[100] bg-ink/90 flex items-center justify-center p-6"
+          onClick={() => setOpenIndex(null)}
+        >
+          <button
+            onClick={() => setOpenIndex(null)}
+            className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-white border-2 border-ink shadow-brutal-sm"
+          >
+            <Icon name="X" size={20} />
+          </button>
+          <img
+            src={images[openIndex]}
+            alt={`${title} — фото ${openIndex + 1}`}
+            className="max-w-full max-h-full border-2 border-ink object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ArticleSeo = ({ article }: { article: ArticleData }) => {
   useSeo({
@@ -95,6 +139,8 @@ const Article = () => {
             <div className="bg-white border-2 border-ink shadow-brutal p-6 md:p-10 font-golos text-base text-foreground/80 leading-relaxed whitespace-pre-wrap">
               {article.content}
             </div>
+
+            <Gallery images={article.gallery_images} title={article.title} />
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-violet border-2 border-ink p-6 shadow-brutal">
               <p className="font-golos text-sm text-white font-semibold">

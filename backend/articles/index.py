@@ -38,7 +38,7 @@ def handler(event: dict, context) -> dict:
 
     if slug:
         cur.execute(
-            f'SELECT id, slug, title, content, image_url, published_at FROM {table} WHERE slug = %s',
+            f'SELECT id, slug, title, content, image_url, gallery_images, published_at FROM {table} WHERE slug = %s',
             (slug,)
         )
         row = cur.fetchone()
@@ -47,6 +47,7 @@ def handler(event: dict, context) -> dict:
         if not row:
             return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'Статья не найдена'})}
         row['published_at'] = row['published_at'].isoformat()
+        row['gallery_images'] = row['gallery_images'] or []
         return {'statusCode': 200, 'headers': headers, 'body': json.dumps(row, ensure_ascii=False)}
 
     page = max(int(params.get('page', 1)), 1)
