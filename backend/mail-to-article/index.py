@@ -4,6 +4,7 @@ import json
 import os
 import re
 import uuid
+from datetime import datetime
 from email.header import decode_header
 from email.utils import parseaddr
 
@@ -70,8 +71,39 @@ def extract_body_and_images(msg):
     return body_text.strip(), images
 
 
+def next_article_code(cur, table) -> str:
+    day_str = datetime.utcnow().strftime('%Y%m%d')
+    cur.execute(f"SELECT COUNT(*) FROM {table} WHERE article_code LIKE %s", (f'{day_str}-%',))
+    count = cur.fetchone()[0]
+    return f'{day_str}-{count + 1}'
+
+
+def parse_command(subject: str):
+    subject = (subject or '').strip().lower()
+    m = re.match(r'^(удалить|удалить\.|delete)\s+(\S+)', subject)
+    if m:
+        return 'delete', m.group(2).strip()
+    m = re.match(r'^(редактировать|редактировать\.|edit)\s+(\S+)', subject)
+    if m:
+        return 'edit', m.group(2).strip()
+    return None, None
+
+
+def upload_images(s3, images, slug):
+    uploaded_urls = []
+    for idx, img in enumerate(images):
+        key = f"articles/{slug}-{idx}-{uuid.uuid4().hex[:8]}.{img['ext']}"
+        s3.put_object(Bucket='files', Key=key, Body=img['bytes'], ContentType=img['content_type'])
+        url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
+        uploaded_urls.append(url)
+    return uploaded_urls
+
+
 def handler(event: dict, context) -> dict:
-    """Проверяет почтовый ящик по IMAP и публикует новые письма (текст + фото) как статьи блога"""
+    """Проверяет почтовый ящик по IMAP и публикует/редактирует/удаляет статьи блога на основе писем.
+    Обычное письмо (текст + фото) создаёт новую статью.
+    Тема письма 'удалить <код>' удаляет статью с указанным article_code.
+    Тема письма 'редактировать <код>' обновляет заголовок, текст и (если приложены) фото статьи."""
     method = event.get('httpMethod', 'GET')
 
     if method == 'OPTIONS':
@@ -147,6 +179,57 @@ def handler(event: dict, context) -> dict:
             imap.uid('store', uid, '+FLAGS', '\\Seen')
             continue
 
+        subject = decode_mime_text(msg.get('Subject', ''))
+        action, article_code = parse_command(subject)
+
+        if action == 'delete':
+            cur.execute(f'DELETE FROM {table} WHERE article_code = %s RETURNING id', (article_code,))
+            deleted = cur.fetchone()
+            if deleted:
+                processed.append({'action': 'delete', 'article_code': article_code, 'article_id': deleted[0]})
+            else:
+                skipped.append({'uid': uid_str, 'reason': 'article not found for delete', 'article_code': article_code})
+            imap.uid('store', uid, '+FLAGS', '\\Seen')
+            continue
+
+        if action == 'edit':
+            body_text, images = extract_body_and_images(msg)
+            if not body_text:
+                skipped.append({'uid': uid_str, 'reason': 'need text for edit', 'article_code': article_code})
+                imap.uid('store', uid, '+FLAGS', '\\Seen')
+                continue
+
+            cur.execute(f'SELECT id, slug FROM {table} WHERE article_code = %s', (article_code,))
+            existing = cur.fetchone()
+            if not existing:
+                skipped.append({'uid': uid_str, 'reason': 'article not found for edit', 'article_code': article_code})
+                imap.uid('store', uid, '+FLAGS', '\\Seen')
+                continue
+
+            existing_id, existing_slug = existing
+            lines = [l for l in body_text.split('\n') if l.strip()]
+            new_title = (lines[0].strip() if lines else 'Без названия')[:200]
+            new_content = body_text.strip()
+
+            if images:
+                uploaded_urls = upload_images(s3, images, existing_slug)
+                cover_image = uploaded_urls[0]
+                gallery_images = uploaded_urls[1:]
+                cur.execute(
+                    f"""UPDATE {table} SET title = %s, content = %s, image_url = %s, gallery_images = %s
+                        WHERE id = %s""",
+                    (new_title, new_content, cover_image, json.dumps(gallery_images), existing_id)
+                )
+            else:
+                cur.execute(
+                    f"UPDATE {table} SET title = %s, content = %s WHERE id = %s",
+                    (new_title, new_content, existing_id)
+                )
+
+            processed.append({'action': 'edit', 'article_code': article_code, 'article_id': existing_id})
+            imap.uid('store', uid, '+FLAGS', '\\Seen')
+            continue
+
         body_text, images = extract_body_and_images(msg)
 
         if not body_text or not images:
@@ -164,23 +247,19 @@ def handler(event: dict, context) -> dict:
         if cur.fetchone():
             slug = f"{slug_base}-{uuid.uuid4().hex[:6]}"
 
-        uploaded_urls = []
-        for idx, img in enumerate(images):
-            key = f"articles/{slug}-{idx}-{uuid.uuid4().hex[:8]}.{img['ext']}"
-            s3.put_object(Bucket='files', Key=key, Body=img['bytes'], ContentType=img['content_type'])
-            url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
-            uploaded_urls.append(url)
-
+        uploaded_urls = upload_images(s3, images, slug)
         cover_image = uploaded_urls[0]
         gallery_images = uploaded_urls[1:]
 
+        code = next_article_code(cur, table)
+
         cur.execute(
-            f"""INSERT INTO {table} (slug, title, content, image_url, gallery_images, mail_uid, source, published_at)
-                VALUES (%s, %s, %s, %s, %s, %s, 'email', NOW()) RETURNING id""",
-            (slug, title, content, cover_image, json.dumps(gallery_images), uid_str)
+            f"""INSERT INTO {table} (slug, title, content, image_url, gallery_images, mail_uid, source, article_code, published_at)
+                VALUES (%s, %s, %s, %s, %s, %s, 'email', %s, NOW()) RETURNING id""",
+            (slug, title, content, cover_image, json.dumps(gallery_images), uid_str, code)
         )
         article_id = cur.fetchone()[0]
-        processed.append({'article_id': article_id, 'slug': slug, 'title': title})
+        processed.append({'action': 'create', 'article_id': article_id, 'slug': slug, 'title': title, 'article_code': code})
 
         imap.uid('store', uid, '+FLAGS', '\\Seen')
 

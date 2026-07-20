@@ -24,6 +24,13 @@ def slugify(text: str) -> str:
     return result[:80] or str(uuid.uuid4())[:8]
 
 
+def next_article_code(cur, table) -> str:
+    day_str = datetime.utcnow().strftime('%Y%m%d')
+    cur.execute(f"SELECT COUNT(*) FROM {table} WHERE article_code LIKE %s", (f'{day_str}-%',))
+    count = cur.fetchone()[0]
+    return f'{day_str}-{count + 1}'
+
+
 def handler(event: dict, context) -> dict:
     """Принимает посты из Telegram-бота (текст + одна фотография) и публикует их как статьи блога на сайте"""
     method = event.get('httpMethod', 'GET')
@@ -127,11 +134,12 @@ def handler(event: dict, context) -> dict:
         slug = f"{slug_base}-{uuid.uuid4().hex[:6]}"
 
     telegram_message_id = message.get('message_id')
+    code = next_article_code(cur, table)
 
     cur.execute(
-        f"""INSERT INTO {table} (slug, title, content, image_url, telegram_message_id, published_at)
-            VALUES (%s, %s, %s, %s, %s, NOW()) RETURNING id""",
-        (slug, title, content, image_url, telegram_message_id)
+        f"""INSERT INTO {table} (slug, title, content, image_url, telegram_message_id, article_code, published_at)
+            VALUES (%s, %s, %s, %s, %s, %s, NOW()) RETURNING id""",
+        (slug, title, content, image_url, telegram_message_id, code)
     )
     article_id = cur.fetchone()[0]
     cur.close()

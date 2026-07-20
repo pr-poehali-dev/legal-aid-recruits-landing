@@ -38,7 +38,7 @@ def handler(event: dict, context) -> dict:
 
     if slug:
         cur.execute(
-            f'SELECT id, slug, title, content, image_url, gallery_images, published_at FROM {table} WHERE slug = %s',
+            f'SELECT id, slug, title, content, image_url, gallery_images, article_code, published_at FROM {table} WHERE slug = %s',
             (slug,)
         )
         row = cur.fetchone()

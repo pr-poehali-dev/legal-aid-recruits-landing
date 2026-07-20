@@ -12,6 +12,7 @@ interface ArticleData {
   content: string;
   image_url: string;
   gallery_images: string[];
+  article_code: string;
   published_at: string;
 }
 
@@ -153,6 +154,12 @@ const Article = () => {
                 Задать вопрос →
               </Link>
             </div>
+
+            {article.article_code && (
+              <p className="mt-6 text-center font-golos text-xs text-foreground/35 font-medium">
+                ID статьи: {article.article_code}
+              </p>
+            )}
           </>
         )}
       </div>
