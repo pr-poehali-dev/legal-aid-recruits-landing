@@ -17,3 +17,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://prizivnik59.ru/sitemap.xml
+Sitemap: https://functions.poehali.dev/68936dfb-9347-4c0f-9198-8f35e4f6605b

@@ -103,16 +103,38 @@ function formatDate(iso: string) {
 
 const cardBg = ["bg-violet", "bg-lime", "bg-pink-brand", "bg-orange-brand"];
 
-const Blog = () => {
-  useSeo({
-    title: "Статьи и новости | Военком-Гарант — Призывник 59",
-    description: "Полезные статьи о призыве, освобождении от военной службы по состоянию здоровья и правах призывников от юристов Военком-Гарант в Перми.",
-  });
+const SITE_URL = "https://prizivnik59.ru";
 
+const Blog = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  useSeo({
+    title: "Статьи и новости | Военком-Гарант — Призывник 59",
+    description: "Полезные статьи о призыве, освобождении от военной службы по состоянию здоровья и правах призывников от юристов Военком-Гарант в Перми.",
+    canonical: `${SITE_URL}/blog`,
+    image: "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/bucket/8d14a79e-8a80-4e5d-80a9-97b8e95d01f1.jpg",
+    type: "website",
+    jsonLd: !loading && articles.length > 0 ? {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${SITE_URL}/blog#collection`,
+      name: "Статьи и новости — Военком-Гарант",
+      url: `${SITE_URL}/blog`,
+      isPartOf: { "@type": "WebSite", name: "Военком-Гарант", url: SITE_URL },
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: articles.map((a, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `${SITE_URL}/blog/${a.slug}`,
+          name: a.title,
+        })),
+      },
+    } : undefined,
+  });
 
   useEffect(() => {
     setLoading(true);

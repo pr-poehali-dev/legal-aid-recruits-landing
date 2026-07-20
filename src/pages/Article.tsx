@@ -63,10 +63,56 @@ const Gallery = ({ images, title }: { images: string[]; title: string }) => {
   );
 };
 
+const SITE_URL = "https://prizivnik59.ru";
+
 const ArticleSeo = ({ article }: { article: ArticleData }) => {
+  const description = article.content.slice(0, 160).replace(/\s+/g, " ").trim();
+  const url = `${SITE_URL}/blog/${article.slug}`;
+
   useSeo({
     title: `${article.title} | Военком-Гарант — Призывник 59`,
-    description: article.content.slice(0, 160),
+    description,
+    canonical: url,
+    image: article.image_url,
+    type: "article",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "@id": `${url}#article`,
+          mainEntityOfPage: { "@type": "WebPage", "@id": url },
+          headline: article.title,
+          description,
+          image: [article.image_url, ...(article.gallery_images || [])],
+          datePublished: article.published_at,
+          dateModified: article.published_at,
+          author: {
+            "@type": "Organization",
+            name: "Военком-Гарант",
+            url: SITE_URL,
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Военком-Гарант",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://cdn.poehali.dev/projects/49883a6d-fc50-4167-8b23-47aa1127425a/bucket/8d14a79e-8a80-4e5d-80a9-97b8e95d01f1.jpg",
+            },
+          },
+          articleSection: "Статьи о призыве",
+          inLanguage: "ru-RU",
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Главная", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Статьи", item: `${SITE_URL}/blog` },
+            { "@type": "ListItem", position: 3, name: article.title, item: url },
+          ],
+        },
+      ],
+    },
   });
   return null;
 };
