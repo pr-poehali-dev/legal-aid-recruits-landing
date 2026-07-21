@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import CookieBanner from "@/components/CookieBanner";
+import ArticleContent from "@/components/ArticleContent";
 import { useSeo } from "@/hooks/use-seo";
 import funcUrls from "../../backend/func2url.json";
 
@@ -184,24 +185,7 @@ const Article = () => {
               <img src={article.image_url} alt={article.title} className="w-full max-h-[440px] object-cover" />
             </div>
             <div className="bg-white border-2 border-ink shadow-brutal p-6 md:p-10 font-golos text-base text-foreground/80 leading-relaxed">
-              {article.content.split("\n").map((line, i) => {
-                const match = line.match(/^\s*CTA:\s*(.*)$/i);
-                if (match) {
-                  return (
-                    <blockquote
-                      key={i}
-                      className="my-4 border-l-4 border-violet bg-violet/5 pl-4 py-2 italic text-foreground/70"
-                    >
-                      {match[1]}
-                    </blockquote>
-                  );
-                }
-                return (
-                  <p key={i} className="whitespace-pre-wrap">
-                    {line}
-                  </p>
-                );
-              })}
+              <ArticleContent content={article.content} />
             </div>
 
             <Gallery images={article.gallery_images} title={article.title} />
