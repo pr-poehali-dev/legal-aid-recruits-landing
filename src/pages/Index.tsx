@@ -34,7 +34,7 @@ function isValidPhone(value: string) {
 const steps = [
   {
     num: "01",
-    title: "Бесплатная консультация",
+    title: "Консультация",
     text: "Наш специалист знакомится с тобой в офисе или дистанционно, рассказывает о том, как мы работаем, отвечает на вопросы и оценивает твои шансы — без каких-либо обязательств.",
     icon: "MessageCircle",
     bg: "bg-violet",
@@ -158,7 +158,7 @@ const NavBar = () => {
             +7 (342) 234-19-18
           </a>
           <a href="#contact" onClick={() => setMenuOpen(false)} className="font-golos text-sm font-bold bg-violet text-white px-5 py-3 border-2 border-ink text-center shadow-brutal-sm">
-            Бесплатная консультация
+            Консультация
           </a>
           <div className="flex items-center gap-2">
             <a href="https://vk.com/voenkomgarant" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте" className="w-9 h-9 flex items-center justify-center bg-white border-2 border-ink font-display text-xs font-bold text-foreground shadow-brutal-sm">
@@ -211,7 +211,7 @@ const Hero = () => {
           <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             style={{ transitionDelay: "300ms" }}>
             <a href="#contact" className="font-golos font-bold bg-violet text-white px-8 py-4 border-2 border-ink text-base shadow-brutal hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all text-center">
-              Бесплатная консультация
+              Консультация
             </a>
             <a href="#steps" className="font-golos font-bold bg-white text-foreground px-8 py-4 border-2 border-ink text-base shadow-brutal hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all text-center">
               Как мы работаем
@@ -426,9 +426,7 @@ const Contact = () => {
             <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-4 leading-tight">
               Запишись на
               <br />
-              <span className="text-violet">бесплатную</span>
-              <br />
-              консультацию
+              <span className="text-violet">консультацию</span>
             </h2>
             <p className="font-golos text-base text-foreground/60 leading-relaxed mb-10 font-medium">
               Расскажем о перспективах твоего дела, ответим на все вопросы — без обязательств.

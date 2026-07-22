@@ -192,7 +192,7 @@ const Article = () => {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-violet border-2 border-ink p-6 shadow-brutal">
               <p className="font-golos text-sm text-white font-semibold">
-                Остались вопросы? Получите бесплатную консультацию юриста.
+                Остались вопросы? Получите консультацию юриста.
               </p>
               <Link
                 to="/#contact"
